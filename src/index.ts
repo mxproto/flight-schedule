@@ -3,38 +3,11 @@ import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import http from "http";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { FlightScheduleApi } from "./dataSources";
+import { typeDefs } from "./typeDefs";
+import { resolvers } from "./resolvers";
 
-const typeDefs = `
-    type Flight {
-        flightNumber: String!
-    }
-
-    type Query {
-        flights: [Flight]
-    }
-`;
-
-const flights = [
-  {
-    flightNumber: "2",
-  },
-  {
-    flightNumber: "3",
-  },
-  {
-    flightNumber: "4",
-  },
-  {
-    flightNumber: "5",
-  },
-];
-
-const resolvers = {
-  Query: {
-    flights: () => flights,
-  },
-};
-
+const PORT = 4000;
 const app = express();
 
 const httpServer = http.createServer(app);
@@ -47,12 +20,20 @@ const server = new ApolloServer({
 
 await server.start();
 
-app.use("/", express.json(), expressMiddleware(server));
-
-await new Promise<void>((resolve) =>
-  httpServer.listen({ port: 4000 }, resolve)
+app.use(
+  "/",
+  express.json(),
+  expressMiddleware(server, {
+    context: async () => ({
+      dataSources: {
+        flightScheduleApi: new FlightScheduleApi(),
+      },
+    }),
+  })
 );
 
-const PORT = 4000;
+await new Promise<void>((resolve) =>
+  httpServer.listen({ port: PORT }, resolve)
+);
 
 console.log(`\nServer running at http://localhost:${PORT}/`);
