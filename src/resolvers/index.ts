@@ -1,6 +1,10 @@
 export const resolvers = {
   Query: {
-    flights: (_, __, context) =>
-      context.dataSources.flightScheduleApi.getFlightSchedule(),
+    flights: (_, args, context) => {
+      const numberOfFlights = args.n;
+      return context.dataSources.flightScheduleApi.getFlightSchedule(
+        numberOfFlights
+      );
+    },
   },
 };
