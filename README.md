@@ -7,7 +7,7 @@ Flight schedule generator
 1. Installation
 
 ```
-$ pnpm install && pnpm start
+$ nvm install && pnpm install && pnpm start
 ```
 
 2. Visit http://localhost:4000/
