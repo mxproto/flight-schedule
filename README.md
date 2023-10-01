@@ -15,12 +15,12 @@ $ pnpm install && pnpm start
 3. Paste the following graphql query into the sandbox to get generated flight schedule
 
 ```
-    query {
-        flights(n: 10) {
-            flightNumber
-            airline
-            origin
-            destination
-        }
+query {
+    flights(n: 10) {
+        flightNumber
+        airline
+        origin
+        destination
     }
+}
 ```
